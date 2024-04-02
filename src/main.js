@@ -9,6 +9,7 @@ import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 import '@mdi/font/css/materialdesignicons.css'
 import './assets/main.scss'
+import 'vue3-toastify/dist/index.css';
 
 const vuetify = createVuetify({
   components,
@@ -16,6 +17,4 @@ const vuetify = createVuetify({
   defaultSet: 'mdi'
 })
 
-createApp(App).use(vuetify).use(router).use(Vue3Toastify, {
-  autoClose: 3000,
-}).mount('#app')
+createApp(App).use(vuetify).use(router).use(Vue3Toastify).mount('#app')

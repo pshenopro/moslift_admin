@@ -28,10 +28,9 @@ const fetchlogin = async () => {
 
     console.log(data)
   } catch (e) {
-    toast("Ошибка авторизации", {
-      autoClose: 1000,
-      position: toast.POSITION.TOP_RIGHT,
-    });
+    toast.error(e?.message, {
+    position: toast.POSITION.TOP_RIGHT,
+  });
   } finally {
     state.loading = false
   }

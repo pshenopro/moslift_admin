@@ -2,12 +2,39 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
   {
+    path: '/',
+    redirect: '/login',
+  },
+  {
     path: '/login',
+    name: 'login',
     component: () => import('./pages/Login.vue'),
   },
   {
     path: '/home',
     component: () => import('./pages/Home.vue'),
+    children: [
+      {
+        path: '/mail',
+        name: 'mail',
+        component: () => import('./pages/mail/Home.vue')
+      },
+      {
+        path: '/mail/:id',
+        name: 'mail-id',
+        component: () => import('./pages/mail/Id.vue')
+      },
+      {
+        path: '/profile',
+        name: 'profile',
+        component: () => import('./pages/Profile.vue'),
+      },
+      {
+        path: '/favorite',
+        name: 'favorite',
+        component: () => import('./pages/Favorite.vue'),
+      }
+    ]
   },
 ]
 
@@ -26,8 +53,16 @@ const router = createRouter({
   }
 })
 
-router.beforeEach(to => {
-  return true
+router.beforeEach(async (to, from, next) => {
+  const profile = JSON.parse(localStorage.getItem('user'))
+
+  if (!profile?.name) {
+    if (to.name !== 'login') {
+      next('/login')
+    }
+  }
+
+  next()
 })
 
 // const checkToken = (token: string | null):boolean => {

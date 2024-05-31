@@ -1,11 +1,13 @@
 <script setup>
 import {reactive, ref} from "vue";
+import { useRouter } from 'vue-router'
 import { toast } from 'vue3-toastify';
 
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInWithEmailAndPassword  } from 'firebase/auth';
 import { firebaseConfig } from '../constant.js'
 
+const router = useRouter()
 const app = initializeApp(firebaseConfig)
 const auth = getAuth(app);
 
@@ -24,13 +26,19 @@ const fetchlogin = async () => {
   state.loading = true
 
   try {
-    const data = await signInWithEmailAndPassword(auth, state.email, state.password)
+    const { user } = await signInWithEmailAndPassword(auth, state.email, state.password)
 
-    console.log(data)
+    state.loading = false
+    localStorage.setItem('user', JSON.stringify({
+        ...user,
+        name: user.email?.split('@')?.[0] || user.email
+    }))
+    router.push('/home')
   } catch (e) {
-    toast.error(e?.message, {
-    position: toast.POSITION.TOP_RIGHT,
-  });
+    // toast("Ошибка авторизации", {
+    //   autoClose: 1000,
+    //   position: toast.POSITION.TOP_RIGHT,
+    // });
   } finally {
     state.loading = false
   }
@@ -58,6 +66,7 @@ const fetchlogin = async () => {
             v-model="state.password"
             :readonly="state.loading"
             :rules="[required]"
+            type="password"
             label="Password"
             placeholder="Enter your password"
             clearable

@@ -20,8 +20,6 @@ const updateMessage = async () => {
         const sfDoc = await transaction.get(doc(db, "mails", "message"));
         data.value = sfDoc.data().posts.find(el => el.id === Number(route.params.id))
 
-        console.log(data.value)
-
         transaction.update(doc(db, "mails", "message"), { posts: sfDoc.data().posts.map(el => {
             if (el.id === Number(route.params.id)) {
                 return {
